@@ -1,6 +1,6 @@
 import Logo from "../../assets/logo.svg"
 import SubLogo from "../../assets/sub-logo.svg"
-import Button from "../Button"
+import Button from "../../components/Button"
 import * as S from "./style"
 
 export default function Home() {

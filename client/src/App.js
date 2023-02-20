@@ -1,5 +1,4 @@
 import { createGlobalStyle } from "styled-components";
-import Home from "./components/Home";
 
 const GlobalStyle = createGlobalStyle`
   *{
@@ -17,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <GlobalStyle />
-      <Home />
+      <h1>Test2</h1>
     </div>
   );
 }

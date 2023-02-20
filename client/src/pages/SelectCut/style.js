@@ -5,18 +5,15 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1.2rem;
   height: 100vh;
 `;
 
 export const Subtit = styled.p`
-  color: #212121;
-  margin-bottom: 16px;
-`;
-
-export const SubSpan = styled.span`
-  color: #ff6581;
+  font-weight: 600;
 `;
 
 export const SubLogoImg = styled.img`
-  margin: 55px 0 60px;
+  margin: 1.5rem 0;
+  height: 260px;
 `;
