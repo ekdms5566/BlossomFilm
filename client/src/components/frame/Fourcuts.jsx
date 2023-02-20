@@ -66,11 +66,12 @@ export default function Fourcuts() {
         draggable="true" 
         ref={dragComponentRef}
         onDragStart={(e) => dragStartHandler(e)}
-        // onDrag={(e) => dragHandler(e)}
-        // onDragOver={(e) => dragOverHandler(e)}
         onDragEnd={(e) => dragEndHandler(e)}
         style={{ left: pos.left, top: pos.top }}>
             <Grid>
+              <img src="img/프레임.png">
+                <Myimg></Myimg>
+              </img>
             {/* <Myimg/>
             <Myimg/>
             <Myimg/>

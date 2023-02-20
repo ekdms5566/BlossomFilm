@@ -16,7 +16,7 @@ export default function Editframe() {
     color:white;
     padding:30px;
     `;
-
+    
     return (
         <Container>
             <BackButton/>
