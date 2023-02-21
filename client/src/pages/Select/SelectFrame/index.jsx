@@ -1,6 +1,6 @@
-import Frame from "../../assets/img-frame2.svg"
-import Button from "../../components/Button"
-import * as S from "../SelectCut/style"
+import Frame from "../../../assets/img-frame2.svg"
+import Button from "../../../components/Button"
+import * as S from "../style"
 
 export default function SelectFrame() {
   return (
@@ -9,5 +9,6 @@ export default function SelectFrame() {
       <S.SubLogoImg src={Frame} alt="" />
       <Button text="갤러리에서 직접 선택" />
       <Button text="벚꽃필름 전용 프레임 선택"/>
-    </S.Wrapper>  )
+    </S.Wrapper>
+  )
 }

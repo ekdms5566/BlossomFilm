@@ -1,6 +1,6 @@
-import Frame from "../../assets/img-frame.svg"
-import Button from "../../components/Button"
-import * as S from "./style"
+import Frame from "../../../assets/img-frame.svg"
+import Button from "../../../components/Button"
+import * as S from "../style"
 
 export default function SelectCut() {
   return (
