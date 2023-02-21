@@ -1,15 +1,20 @@
 import styled from "styled-components";
-import { Button } from "../components/Button/style";
+import { Button } from "../../components/Button/style";
 
 export const DownloadFilmLayout = styled.div`
     position: relative;
 
-    height: calc(var(--vh, 1vh) * 100);
+    max-height: calc(var(--vh, 1vh) * 100);
     padding: 0 40px;
 
     display: flex;
     align-items: center;
     flex-direction: column;
+
+    canvas {
+        position: relative;
+        background-color: yellow;
+    }
 
     .back-button {
         position: absolute;
@@ -18,8 +23,7 @@ export const DownloadFilmLayout = styled.div`
     }
 
     .title {
-        margin-top: 167px;
-        margin-bottom: 7.8rem;
+        margin-top: 140px;
         font-weight: 600;
         font-size: 16px;
         line-height: 19px;
@@ -28,11 +32,12 @@ export const DownloadFilmLayout = styled.div`
 
     .option-button {
         margin: 1.6rem;
-        margin-top: 9.125rem;
+        margin-top: 2rem;
     }
 
     .retry-button {
-        margin-top: 1.563rem;
+        padding-top: 1.563rem;
+        padding-bottom: 1.563rem;
         border: none;
         background: none;
 
@@ -42,8 +47,32 @@ export const DownloadFilmLayout = styled.div`
         color: #636363;
 
         cursor: pointer;
-        :active {
-            filter: brightness(0.3);
+    }
+
+    .frame {
+        position: relative;
+        margin-top: 2rem;
+        max-width: 394px;
+        max-height: 32rem;
+
+        background-color: blue;
+
+        /*
+width: 212.64px;
+height: 372.17px;
+
+
+        width: 159.99px;
+        height: 479.96px;
+        */
+
+        display: flex;
+        justify-content: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        img {
+            width: 100%;
         }
     }
 `;
@@ -63,4 +92,10 @@ export const DownloadButton = styled(Button)`
     :active {
         filter: brightness(0.8);
     }
+`;
+
+export const Frame = styled.img`
+    width: 394px;
+    height: 263px;
+    background-color: red;
 `;

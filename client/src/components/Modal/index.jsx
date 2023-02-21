@@ -5,10 +5,8 @@ import { CopyBtn, CopyButtonLayout, ModalLayout } from "./style";
 
 import useCopyClipBoard from "../../utils/userCopyclipBoard";
 
-const Modal = ({ setModalState }) => {
+const Modal = ({ setModalState, url }) => {
     const [isCopy, onCopy] = useCopyClipBoard();
-
-    const url = "http://blossomflim/new/13981098018";
 
     useEffect(() => {
         if (isCopy) alert("복사되었습니다.");

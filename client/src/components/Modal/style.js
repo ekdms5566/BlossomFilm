@@ -3,9 +3,6 @@ import { CheckButtonLayout, OkButton } from "../CheckButton/style";
 
 const boxFade = keyframes`
   0% {
-    opacity: 1;
-  }
-  50% {
     opacity: 0;
   }
   100% {
@@ -21,7 +18,7 @@ export const ModalLayout = styled.div`
     width: 100%;
 
     background-color: rgba(0, 0, 0, 0.5);
-    // animation: ${boxFade} 2s 1s 1 linear alternate;
+    animation: ${boxFade} 0.5s 0s;
 
     .close-btn {
         position: absolute;
