@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import Logo from "../../assets/logo.svg"
 import SubLogo from "../../assets/sub-logo.svg"
 import Button from "../../components/Button"
@@ -11,7 +12,9 @@ export default function Home() {
         <img src={Logo} alt="" />
       </h1>
       <S.SubLogoImg src={SubLogo} alt="" />
-      <Button text="시작하기" className="on" />
+      <Link to="/selectCut">
+        <Button text="시작하기" className="on" />
+      </Link>
     </S.Wrapper>
   )
 }

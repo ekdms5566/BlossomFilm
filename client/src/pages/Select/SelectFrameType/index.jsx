@@ -1,6 +1,6 @@
-import Button from "../../../components/Button"
-import DefaultFrame from "../../../components/DefaultFrame"
-import * as S from "../style"
+import Button from "../../../components/Button";
+import DefaultFrame from "../../../components/DefaultFrame";
+import * as S from "../style";
 
 export default function SelectFrameType() {
   

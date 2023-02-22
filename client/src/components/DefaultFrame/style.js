@@ -17,7 +17,8 @@ export const ArrowBtn = styled.button`
 `;
 
 export const ContImg = styled.img`
-  width: 250px;
+  /* width: 250px; */
+  height: 170px;
   box-shadow: 2px 3px 3px 0.2px rgba(0, 0, 0, 0.1);
   background-color: #f4f4f4;
 `;

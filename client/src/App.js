@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import { CutStore } from "./context/Context";
 
 const GlobalStyle = createGlobalStyle`
   *{
@@ -14,10 +15,12 @@ const GlobalStyle = createGlobalStyle`
 
 function App() {
   return (
-    <div className="App">
-      <GlobalStyle />
-      <h1>Test2</h1>
-    </div>
+    <CutStore>
+      <div className="App">
+        <GlobalStyle />
+        {/* <h1>Test2</h1> */}
+      </div>
+    </CutStore>
   );
 }
 
