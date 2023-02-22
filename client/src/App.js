@@ -1,5 +1,10 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import { CutStore } from "./context/Context";
+import Home from "./pages/Home";
+import SelectCut from "./pages/Select/SelectCut";
+import SelectFrame from "./pages/Select/SelectFrame";
+import SelectFrameType from "./pages/Select/SelectFrameType";
 
 const GlobalStyle = createGlobalStyle`
   *{
@@ -16,10 +21,17 @@ const GlobalStyle = createGlobalStyle`
 function App() {
   return (
     <CutStore>
-      <div className="App">
-        <GlobalStyle />
-        {/* <h1>Test2</h1> */}
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <GlobalStyle />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/selectCut" element={<SelectCut />} />
+            <Route path={"/selectFrame"} element={<SelectFrame />} />
+            <Route path="/selectFrametype" element={<SelectFrameType />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
     </CutStore>
   );
 }
