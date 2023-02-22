@@ -21,11 +21,11 @@ export default function Editframe() {
         <Container>
             <BackButton/>
             <Section>
-                <p>사진을 드래그하여 프레임을 수정해보세요!</p>
+                <p>프레임 배경 사진을 수정해보세요!</p>
             </Section>
             <Section>
-                {/* <Fourcuts>
-                </Fourcuts> */}
+            <Fourcuts>
+            </Fourcuts>
             </Section>
             <Section>
                 <Link to='/Uploadimg'>

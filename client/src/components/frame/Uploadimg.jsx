@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Fourcuts from "./Fourcuts";
 import Editframe from "./Editframe";
 import { useState } from "react";
@@ -12,9 +12,10 @@ const BgImg = styled.div`
 background-image: url("img/bgComponent.png");
 background-repeat: no-repeat;
 background-position: center;
+background-size:cover;
 z-index:1;
-width:319px;
-height:213px;
+width:394px;
+height:263px;
 `;
 
 const Container = styled.div`
@@ -29,71 +30,53 @@ justify-content:center;
 height:100%;
 color: white;
 padding: 30px;
+& > .uploadBtn{
+  margin:0px 0px 20px 0px;
+}
 `;
 
-const Grid = styled.div`
-display:grid;
-width:100%;
-height: 100%;
-grid-template-columns: repeat(2, 0.4fr);
-grid-template-rows: repeat(2, 0.407fr);   
-margin: 51px 0px 0px 14px;
+const Buttonbox = styled.div`
+margin:63px 0px 0px 40px;
 `;
+// const Grid = styled.div`
+// display:grid;
+// width:100%;
+// height: 100%;
+// grid-template-columns: repeat(2, 0.4fr);
+// grid-template-rows: repeat(2, 0.407fr);   
+// margin: 51px 0px 0px 14px;
+// `;
 export default function Uploadimg() {
-  const [images, setImages] = useState([
-    {
-      id: 1,
-      isTrue: false,
-    },
-    {
-      id: 2,
-      isTrue: false,
-    },
-    {
-      id: 3,
-      isTrue: false,
-    },
-    {
-      id: 4,
-      isTrue: false,
-    },
-  ]);
-
-  const isUploadAll = images.filter((img) => {
-    return img.isTrue === false;
-  });
-  const isUploadimg = (id, isTrue, file) => {
-    console.log(id,isTrue,file);
+  const [complete, setCompelete] = useState(false);
+  const [isdelete, setIsDelete] = useState(false);
+  const isUploadimg = (iscomplete) => {
+    const temp = iscomplete === 0;
+    setCompelete(temp);
+  }
+  const handleClick = () => {
+    return isdelete;
   }
   return (
     <Container>
+      <Buttonbox>
       <BackButton />
+      </Buttonbox>
       <Section>
         <p>사진을 4장 업로드해주세요!</p>
       </Section>
       <Section>
         <BgImg>
-          <Grid>
-            <Myimg/>
-          </Grid>
+            <Myimg isUpload={isUploadimg} myref={handleClick}/>
         </BgImg>
       </Section>
       <Section>
-        {isUploadAll.length === 0 ? (
-          <div>
-            <Link to='/정보입력'><Button>확인</Button></Link>
-            <Button>사진 전체 삭제</Button>
-          </div>
-        ) : (
-          <Button>갤러리에서 선택</Button>
-        )}
+          {complete && <div>
+            <Link to='/정보입력'><Button className="uploadBtn">확인</Button></Link>
+            <Button onClick={() => {
+              setIsDelete(true)
+              }}>사진 전체 삭제</Button>
+          </div>}
       </Section>
     </Container>
   );
 }
- // <Myimg 
-              // key={image.id}
-              // id={image.id}
-              // bool={image.isTrue}
-              // upload={isUploadimg}
-              // />  

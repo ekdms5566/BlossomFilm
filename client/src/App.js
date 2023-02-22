@@ -6,7 +6,7 @@ import { createBrowserRouter, Route, RouterProvider } from "react-router-dom";
 import Uploadimg from './components/frame/Uploadimg';
 import Button from './components/Button';
 import Root from './Router/Root';
-
+import styled from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
  *{
@@ -33,7 +33,6 @@ const router = createBrowserRouter([
     element: <Uploadimg/>, 
   }
 ]);
-
 
 
 function App() {
