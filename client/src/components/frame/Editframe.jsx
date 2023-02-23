@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '../Button/style';
 import Fourcuts from './Fourcuts';
 import styled from "styled-components";
@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import BackButton from '../BackButton';
 
 export default function Editframe() {
+    const [imgData, setImgData] = useState("");
     const Container = styled.div`
     display:flex;
     flex-direction: column;
