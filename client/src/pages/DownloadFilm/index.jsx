@@ -75,7 +75,9 @@ const DownloadFilm = () => {
     };
 
     return (
-        <DownloadFilmLayout>
+        <DownloadFilmLayout
+            type={frame && frame.includes("hor") ? "hor" : "ver"}
+        >
             {isModalOpen ? (
                 <Modal setModalState={setModalOpen} url={url} />
             ) : null}
@@ -87,7 +89,7 @@ const DownloadFilm = () => {
             <h1 className="title">봄을 담은 벚꽃필름이 완성되었어요!</h1>
             {film ? (
                 <div className="frame">
-                    <img src={film} />{" "}
+                    <img src={film} />
                 </div>
             ) : (
                 <>Film is Missing</>
@@ -102,14 +104,17 @@ const DownloadFilm = () => {
                 className="share"
                 onClick={onClickShare}
             ></Button>
+            {
+                //TODO : 제공 프레임일 경우 공유하기 버튼 숨기기
+            }
             <button className="retry-button" onClick={onClickRetry}>
                 {" "}
                 벚꽃필름 다시 만들기
             </button>
-            {
+            {/* {
                 title ? <p>{title}</p> : null
                 //확인용
-            }
+            } */}
         </DownloadFilmLayout>
     );
 };

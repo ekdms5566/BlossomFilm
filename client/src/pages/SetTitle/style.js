@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { CheckButtonLayout } from "../../components/CheckButton/style";
 
 export const SetTitleLayout = styled.div`
     position: relative;
@@ -29,4 +30,9 @@ export const SetTitleLayout = styled.div`
         margin: 1.6rem;
         margin-top: 9.125rem;
     }
+`;
+
+export const TitleInput = styled(CheckButtonLayout)`
+    padding-right: 26px;
+    width: calc(100% - 80px);
 `;

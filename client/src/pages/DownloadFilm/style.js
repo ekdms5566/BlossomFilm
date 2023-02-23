@@ -24,6 +24,7 @@ export const DownloadFilmLayout = styled.div`
 
     .title {
         margin-top: 140px;
+        margin-bottom: 40px;
         font-weight: 600;
         font-size: 16px;
         line-height: 19px;
@@ -51,28 +52,25 @@ export const DownloadFilmLayout = styled.div`
 
     .frame {
         position: relative;
-        margin-top: 2rem;
-        max-width: 394px;
-        max-height: 32rem;
 
-        background-color: blue;
+        ${(props) =>
+            props.type === "hor"
+                ? `width : 394px; height: 264px; margin : 3rem  0; `
+                : `width :200px; height :600px; `}
 
-        /*
-width: 212.64px;
-height: 372.17px;
-
-
-        width: 159.99px;
-        height: 479.96px;
-        */
-
-        display: flex;
-        justify-content: center;
+        overflow: hidden;
         background-repeat: no-repeat;
         background-size: cover;
 
         img {
-            width: 100%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            margin: 0 auto;
         }
     }
 `;
