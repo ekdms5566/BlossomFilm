@@ -1,15 +1,17 @@
 import React, { useRef } from "react";
-import Fourcuts from "./Fourcuts";
-import Editframe from "./Editframe";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BackButton from "../BackButton";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Button } from "../Button/style";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Myimg from "./Myimg";
 
 const BgImg = styled.div`
-background-image: url("img/bgComponent.png");
+  ${(props) =>
+    props.data &&
+    css`
+      background-image: url(${props.data});
+    `};
 background-repeat: no-repeat;
 background-position: center;
 background-size:cover;
@@ -49,6 +51,7 @@ margin:63px 0px 0px 40px;
 export default function Uploadimg() {
   const [complete, setCompelete] = useState(false);
   const [isdelete, setIsDelete] = useState(false);
+  const [frameImg, setFrameImg] = useState("");
   const isUploadimg = (iscomplete) => {
     const temp = iscomplete === 0;
     setCompelete(temp);
@@ -56,6 +59,18 @@ export default function Uploadimg() {
   const handleClick = () => {
     return isdelete;
   }
+  const location = useLocation();
+	const madeframe = location.state.post;
+  useEffect(() => {
+    setFrameImg(madeframe);
+  },[frameImg])
+
+  useEffect(() => {
+    setIsDelete(false);
+  },[isdelete])
+  console.log(frameImg);
+
+  console.log(isdelete);
   return (
     <Container>
       <Buttonbox>
@@ -65,7 +80,7 @@ export default function Uploadimg() {
         <p>사진을 4장 업로드해주세요!</p>
       </Section>
       <Section>
-        <BgImg>
+        <BgImg data={frameImg}>
             <Myimg isUpload={isUploadimg} myref={handleClick}/>
         </BgImg>
       </Section>
@@ -73,7 +88,7 @@ export default function Uploadimg() {
           {complete && <div>
             <Link to='/정보입력'><Button className="uploadBtn">확인</Button></Link>
             <Button onClick={() => {
-              setIsDelete(true)
+              setIsDelete(true);
               }}>사진 전체 삭제</Button>
           </div>}
       </Section>

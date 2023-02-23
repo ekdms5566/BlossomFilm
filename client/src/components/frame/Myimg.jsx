@@ -1,98 +1,201 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import styled from "styled-components";
-
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
 const Grid = styled.div`
-display:grid;
-width:100%;
-height: 100%;
-grid-template-columns: repeat(2, 1fr);
-grid-template-rows: repeat(2, 1fr);   
-margin: 21px 0px 0px 14px;
- 
-section {
-    
-}
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  margin: 21px 0px 0px 14px;
+
+  section {
+  }
 `;
 
 const Img = styled.img`
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translate(50, 50);
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    margin: auto;
-  `;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
+`;
 
 const Label = styled.label`
-  background-color:#FF6600;
+  background-color: #ff6600;
   border-radius: 4px;
   color: white;
   cursor: pointer;
 `;
 
 const Input = styled.input`
-    display:none;
+  display: none;
 `;
 
 const ImgWrapper = styled.div`
-    position: relative;
-    width: 122px;
-    height: 81px;
+  position: relative;
+  width: 122px;
+  height: 81px;
 `;
 
 export default function Myimg(props) {
-    const [files, setFiles] = useState({File1 : "", File2 : "", File3: "", File4: ""});
+  var cropperRef = useRef(null);
+  // 유저가 첨부한 이미지
+  const [files, setFiles] = useState({
+    File1: "",
+    File2: "",
+    File3: "",
+    File4: "",
+  });
+  const [cropData, setCropData] = useState({
+    File1: "",
+    File2: "",
+    File3: "",
+    File4: "",
+  });
+  const [inputImage, setInputImage] = useState(null);
+  const [cropper, setCropper] = useState();
+  const [showcropper, setshowCropper] = useState(false);
+  const [croppedImage, setCroppedImage] = useState(null);
+  const [complete, setComplete] = useState(false);
+  const [tempref, setTempref] = useState("");
+  //유저가 선택한 영역만큼 크롭된 이미지
+  console.log(showcropper);
+  let fileArr = Object.keys(files).map((item) => files[item]);
+  const comFileUpload = fileArr.filter((file) => file === "");
 
-    let fileArr = Object.keys(files).map(item => files[item]);
-    const comFileUpload = fileArr.filter((file) => file === "");
-     useEffect(() => {
-        props.isUpload(comFileUpload.length);
-        
-     },[files])
+  useEffect(() => {
+    props.isUpload(comFileUpload.length);
+  }, [files]);
 
-     useMemo(() => {
-        console.log(props.myref());
-        setFiles({...files,File1:"",File2:"",File3:"",File4:""});
-    },[props.myref()])
+  useMemo(() => {
+    console.log(props.myref());
+    setInputImage(null);
+    setComplete(false);
+    setshowCropper(true);
+    setTempref("");
+    setCroppedImage(null);
+    setFiles({File1: "", File2: "", File3: "", File4: "" });
+    setCropData({File1: "", File2: "", File3: "", File4: "" });
+    
+  }, [props.myref()]);
 
+  console.log(cropper);
+  const onloadFile = (e) => {
+    console.log(1);
 
-    const onloadFile = (e) => {
-        const image = e.target.id;
-        const imgURL = files && URL.createObjectURL(e.target.files[0]);
-        setFiles({...files, [image]:imgURL});
-       
+    setTempref(e.target.id);
+    console.log(showcropper);
+    setshowCropper(false);
+    console.log(showcropper);
+    setInputImage(URL.createObjectURL(e.target.files[0]));
+    const image = e.target.id;
+    const imgURL = files && URL.createObjectURL(e.target.files[0]);
+    setFiles({ ...files, [image]: imgURL });
+  };
+
+  const onCrop = () => {
+    const imageElement = cropperRef?.current;
+    const cropper = imageElement?.cropper;
+    setCroppedImage(cropper.getCroppedCanvas().toDataURL());
+    setComplete(true);
+  };
+
+  const getCropData = (e) => {
+    setshowCropper(true);
+    if (typeof cropper !== "undefined") {
+     const imgURL = cropper.getCroppedCanvas().toDataURL()
+      setCropData({ ...cropData, [tempref]: imgURL });
     }
-    return (
-        <section>
-            <form method="post" enctype="multipart/form-data">
-                <Grid>
-                <section>
-                    {!files.File1 && <Label for="File1">+</Label>}
-                    {files.File1 && <ImgWrapper><Img alt="sample" src={files.File1} /></ImgWrapper>}
-                </section>            
-                <section>
-                    {!files.File2 && <Label for="File2">+</Label>}
-                    {files.File2 && <ImgWrapper><Img alt="sample" src={files.File2} /></ImgWrapper>}
-                    </section>
-                    <section>
-                    {!files.File3 && <Label for="File3">+</Label>}
-                    {files.File3 && <ImgWrapper><Img alt="sample" src={files.File3} /></ImgWrapper>}
-                    </section>
-                    <section>
-                    {!files.File4 && <Label for="File4">+</Label>}
-                    {files.File4 && <ImgWrapper><Img alt="sample" src={files.File4} /></ImgWrapper>}
-                    </section>
-                </Grid>
-                <Input type="file" id="File1" name="chooseFile" accept="image/*" onChange={onloadFile} />
-                <Input type="file" id="File2" name="chooseFile" accept="image/*" onChange={onloadFile} />
-                <Input type="file" id="File3" name="chooseFile" accept="image/*" onChange={onloadFile} />
-                <Input type="file" id="File4" name="chooseFile" accept="image/*" onChange={onloadFile} />
-            </form>
-            {/* {files.File2 && <div><Img alt="sample" src={files.File2} /></div>}
-            {files.File3 && <div><Img alt="sample" src={files.File3} /></div>}
-            {files.File4 && <div><Img alt="sample" src={files.File4} /></div>} */}
-        </section>
-    );
+    console.log(cropperRef.current);
+  };
+  console.log(tempref);
+  const reCrop = () => {
+    setshowCropper(false);
+  };
+  return (
+    <section>
+      <section className="btnbox">
+        <button onClick={getCropData}>이미지저장</button>
+        <button onClick={reCrop}>다시 자르기</button>
+      </section>
+      <Cropper
+        className={showcropper ? `cropper-hidden` : "cropperObject"}
+        src={inputImage}
+        crop={onCrop}
+        ref={cropperRef}
+        onInitialized={(instance) => {
+            setCropper(instance);
+        }}
+      />
+      <form method="post" enctype="multipart/form-data">
+        <Grid>
+          <section>
+            {!cropData.File1 && <Label for="File1">+</Label>}
+            {cropData.File1 && (
+              <ImgWrapper>
+                <Img alt="sample" src={cropData.File1} />
+              </ImgWrapper>
+            )}
+          </section>
+          <section>
+            {!cropData.File2 && <Label for="File2">+</Label>}
+            {cropData.File2 && (
+              <ImgWrapper>
+                <Img alt="sample" src={cropData.File2} />
+              </ImgWrapper>
+            )}
+          </section>
+          <section>
+            {!cropData.File3 && <Label for="File3">+</Label>}
+            {cropData.File3 && (
+              <ImgWrapper>
+                <Img alt="sample" src={cropData.File3} />
+              </ImgWrapper>
+            )}
+          </section>
+          <section>
+            {!cropData.File4 && <Label for="File4">+</Label>}
+            {cropData.File4 && (
+              <ImgWrapper>
+                <Img alt="sample" src={cropData.File4} />
+              </ImgWrapper>
+            )}
+          </section>
+        </Grid>
+        <Input
+          type="file"
+          id="File1"
+          name="chooseFile"
+          accept="image/*"
+          onChange={onloadFile}
+        />
+        <Input
+          type="file"
+          id="File2"
+          name="chooseFile"
+          accept="image/*"
+          onChange={onloadFile}
+        />
+        <Input
+          type="file"
+          id="File3"
+          name="chooseFile"
+          accept="image/*"
+          onChange={onloadFile}
+        />
+        <Input
+          type="file"
+          id="File4"
+          name="chooseFile"
+          accept="image/*"
+          onChange={onloadFile}
+        />
+      </form>
+    </section>
+  );
 }

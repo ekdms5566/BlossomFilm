@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components";
 import Myimg from "./Myimg";
+import imageCompression from 'browser-image-compression'; 
 import React, { useEffect, useRef, useState } from "react";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
@@ -17,7 +18,8 @@ const Container = styled.div`
     overflow: hidden;
     position: relative;
   }
-  .wrapperContainer > .cropperTool {
+  .wrapperContainer > .cropperObject > .cropper-container {
+    width:400px;
   }
 
   .wrapperContainer > .btnbox{
@@ -93,29 +95,49 @@ const BgImg = styled.div`
     padding: 3px;
   }
 `;
-// const Grid = styled.div`
-// display:grid;
-// width:100%;
-// height: 100%;
-// grid-template-columns: 100px 100px;
-// `;
 
-export default function Fourcuts() {
+export default function Fourcuts(props) {
   const cropperRef = useRef(null);
   // 유저가 첨부한 이미지
-  const [cropData, setCropData] = useState("#");
+  const [cropData, setCropData] = useState("");
   const [inputImage, setInputImage] = useState(null);
   const [cropper, setCropper] = useState();
   // 유저가 선택한 영역만큼 크롭된 이미지
   const [croppedImage, setCroppedImage] = useState(null);
   const [complete, setComplete] = useState(false);
   const [showcropper, setshowCropper] = useState(false);
+
   const onCrop = () => {
     const imageElement = cropperRef?.current;
     const cropper = imageElement?.cropper;
     setCroppedImage(cropper.getCroppedCanvas().toDataURL());
     setComplete(true);
   };
+  const handleFileOnChange = async(e) => {
+        setshowCropper(false);
+        let file = URL.createObjectURL(e.target.files[0]);
+
+        // 이미지 resize 옵션 설정 (최대 width을 100px로 지정)
+  const options = { 
+    maxSizeMB: 2, 
+    maxWidthOrHeight: 100
+    }
+
+    try {
+    const compressedFile = await imageCompression(file, options);
+    setInputImage(compressedFile);
+    
+    // resize된 이미지의 url을 받아 fileUrl에 저장
+    const promise = imageCompression.getDataUrlFromFile(compressedFile);
+    promise.then(result => {
+        setCropData(result);
+    })
+    } catch (error) {
+        console.log(error);
+    }
+    }
+      
+  
   const getCropData = (e) => {
     if (typeof cropper !== "undefined") {
       setCropData(cropper.getCroppedCanvas().toDataURL());
@@ -127,17 +149,22 @@ export default function Fourcuts() {
   const reCrop = () => {
     setshowCropper(false);
   };
+
+  props.pagemove(cropData);
   return (
     <Container>
       <div className="wrapperContainer">
+        {/* 아래 사진입력은 사진을 입력받아서도 수정가능하게끔 할 수 있는 코드  */}
         <input
           type="file"
-          accept="image/*"
-          onChange={(e) =>{
-            setshowCropper(false);
-            setInputImage(URL.createObjectURL(e.target.files[0]));
-          }}
+          accept='image/*' 
+          onChange={handleFileOnChange}
         />
+         {/* 아래 버튼을 누르면 받은 이전화면에서 받은 프레임으로 수정가능
+        <button onClick={() => {
+            setshowCropper(false);
+            setInputImage("assets/Frame1_hor.png");
+        }}></button> */}
         <section className="btnbox">
           <button onClick={getCropData}>
             이미지저장

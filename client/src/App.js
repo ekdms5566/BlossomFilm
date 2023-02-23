@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     text-align: center;
     margin: 0 auto;
-    max-width: 479px;
+    width:100%;
   }
 `;
 const router = createBrowserRouter([
