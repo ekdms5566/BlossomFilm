@@ -1,14 +1,24 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 import { createGlobalStyle } from "styled-components";
+
+import DownloadFilm from "./pages/DownloadFilm";
+import SetTitle from "./pages/SetTitle";
+import Sample from "./pages/SetTitle/Sample";
 const GlobalStyle = createGlobalStyle`
  *{
       margin: 0;
       padding: 0;
+      font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+
   }
   body {
     text-align: center;
     margin: 0 auto;
     max-width: 479px;
   }
+
+  .hidden {height:100%; min-height:100%; overflow:hidden !important; touch-action:none;}
 `;
 
 function App() {
@@ -24,9 +34,18 @@ function App() {
     window.addEventListener("resize", setScreenSize);
 
     return (
-        <div className="App">
-            <GlobalStyle />
-        </div>
+        <RecoilRoot>
+            <div className="App">
+                <GlobalStyle />
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Sample />} />
+                        <Route path="/title" element={<SetTitle />} />
+                        <Route path="/download" element={<DownloadFilm />} />
+                    </Routes>
+                </BrowserRouter>
+            </div>
+        </RecoilRoot>
     );
 }
 
