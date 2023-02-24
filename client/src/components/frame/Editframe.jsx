@@ -1,19 +1,24 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+
 import BackButton from "../BackButton";
 import { Button } from "../Button/style";
 import HomeButton from "../HomeButton";
 import Fourcuts from "./Fourcuts";
+
+
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     background-color: #4a4a4a;
 
-    .buttonBox {
-        margin: 63px 0px 0px 40px;
-    }
+
+.buttonBox{
+    margin:63px 0px 37px 40px;
+}
+
 `;
 
 const Section = styled.div`
@@ -38,13 +43,14 @@ export default function Editframe() {
     return (
         <Container>
             <div className="buttonBox">
-                <Link to="/">
-                    <BackButton />
-                </Link>
-                <HomeButton />
+
+            <Link to ='/'>
+            <BackButton/>
+            </Link>
+
             </div>
-            <Section>
-                <p>프레임 배경 사진을 수정해보세요!</p>
+            <Section >
+                <p style={{margin:'0px 0px 47px 0px'}}>프레임 배경 사진을 수정해보세요!</p>
             </Section>
             <Section>
                 <Fourcuts pagemove={pagemove}></Fourcuts>
