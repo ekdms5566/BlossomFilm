@@ -1,25 +1,28 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import { createGlobalStyle } from "styled-components";
+import { CutStore } from "./context/Context";
 
 import Editframe from "./components/frame/Editframe";
 import Uploadimg from "./components/frame/Uploadimg";
 import SetTitle from "./pages/SetTitle/index";
 import Root from "./Router/Root";
+import Home from "./pages/Home";
+import SelectCut from "./pages/Select/SelectCut";
+import SelectFrame from "./pages/Select/SelectFrame";
+import SelectFrameType from "./pages/Select/SelectFrameType";
 
 const GlobalStyle = createGlobalStyle`
  *{
       margin: 0;
       padding: 0;
       font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
-
   }
   body {
     text-align: center;
     margin: 0 auto;
     max-width: 479px;
   }
-
   .hidden {height:100%; min-height:100%; overflow:hidden !important; touch-action:none;}
 `;
 
@@ -41,7 +44,7 @@ const GlobalStyle = createGlobalStyle`
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Root />,
+        element: <Home />,
     },
     {
         path: "/frame",
@@ -54,6 +57,18 @@ const router = createBrowserRouter([
     {
         path: "/title",
         element: <SetTitle />,
+    },
+    {
+        path: "/selectCut",
+        element: <SelectCut />,
+    },
+    {
+        path: "/selectFrame",
+        element: <SelectFrame />,
+    },
+    {
+        path: "/selectFrametype",
+        element: <SelectFrameType />,
     },
 ]);
 
@@ -71,10 +86,12 @@ function App() {
 
     return (
         <div className="App">
+            <CutStore>
             <GlobalStyle />
             <RecoilRoot>
                 <RouterProvider router={router} />
             </RecoilRoot>
+            </CutStore>
         </div>
     );
 }
