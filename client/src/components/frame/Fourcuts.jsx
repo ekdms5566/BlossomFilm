@@ -53,18 +53,18 @@ export default function Fourcuts(props) {
                     }}
                 />
                 {/* <CropButton
-                    style="color:white"
-                    text="수정하기"
-                    onClick={() => {
-                        setshowCropper(false);
-                        setInputImage("assets/Frame1_hor.png");
-                    }}
-                >
-                    <img
-                        style={{ height: "1.15rem" }}
-                        src="assets/framebtn/blossom.png"
-                    ></img>
-                </CropButton> */}
+               style="color:white"
+               text="수정하기"
+               onClick={() => {
+                   setshowCropper(false);
+                   setInputImage("assets/Frame1_hor.png");
+               }}
+           >
+               <img
+                   style={{ height: "1.15rem" }}
+                   src="assets/framebtn/blossom.png"
+               ></img>
+           </CropButton> */}
 
                 <section className="btnbox">
                     <CropButton
@@ -91,12 +91,7 @@ export default function Fourcuts(props) {
                 {/* <img className="previewImg" src={croppedImage} /> */}
             </div>
             {/* data 에 Redirect시 url 전달 standard에는 프레임 방향 전달*/}
-            <S.BgImg
-                Standard={"Length"}
-                data={
-                    "https://image.musinsa.com/mfile_s01/2019/04/08/204d34bff3a0bd52d5f4a1617136e541182325.jpg"
-                }
-            >
+            <S.BgImg Standard={"Length"} data={cropData}>
                 <div className="imgbox">
                     <Imgbox />
                     <Imgbox />

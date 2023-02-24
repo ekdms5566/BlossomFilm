@@ -16,10 +16,14 @@ const SetTitle = () => {
         nav("/download");
     };
 
+    const onClickBack = () => {
+        nav("/uploadimg");
+    };
+
     return (
         <S.SetTitleLayout>
             <div className="back-button">
-                <BackButton />
+                <BackButton onClick={onClickBack} />
             </div>
             <h1 className="title">프레임 제목을 정해주세요!</h1>
             <S.TitleInput>

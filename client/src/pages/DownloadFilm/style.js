@@ -79,12 +79,17 @@ export const DownloadButton = styled(Button)`
     display: flex;
     flex-direction: row;
     justify-items: center;
-    align-content: space-between;
-
+    align-items: center;
     background-color: #ff6581;
     color: #ffffff;
+    margin: 0 auto;
+    gap: 1rem;
     p {
         flex-grow: 1;
+        text-align: right;
+    }
+    img {
+        padding-right: 2.5rem;
     }
 
     :active {

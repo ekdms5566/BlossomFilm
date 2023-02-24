@@ -47,16 +47,7 @@ const Sample = () => {
             focusImg === "ver"
                 ? document.querySelector("#ver")
                 : document.querySelector("#hor");
-        // html2canvas(canvas.current, {
-        //     allowTaint: true,
-        //     useCORS: true,
-        //     scale: 8,
-        // }).then(function (canvas) {
-        //     var myImage = canvas.toDataURL("image/jpeg");
-        //     setFilm(myImage);
-        // });
 
-        console.log(focusImg);
         setFrame(focusImg);
         html2canvas(target, {
             allowTaint: true,

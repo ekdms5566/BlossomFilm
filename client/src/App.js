@@ -5,6 +5,7 @@ import { CutStore } from "./context/Context";
 
 import Editframe from "./components/frame/Editframe";
 import Uploadimg from "./components/frame/Uploadimg";
+import DownloadFilm from "./pages/DownloadFilm/index";
 import Home from "./pages/Home";
 import SelectCut from "./pages/Select/SelectCut";
 import SelectFrame from "./pages/Select/SelectFrame";
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
     {
         path: "/selectFrametype",
         element: <SelectFrameType />,
+    },
+    {
+        path: "/download",
+        element: <DownloadFilm />,
     },
 ]);
 
