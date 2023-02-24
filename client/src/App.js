@@ -15,7 +15,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     text-align: center;
     margin: 0 auto;
-    width:100%;
+    max-width: 479px;
   }
 `;
 const router = createBrowserRouter([
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     element: <Root />,
   },
   {
-    path: "/editframe",
+    path: "/Editframe",
     element: <Editframe />,
   },
   {
