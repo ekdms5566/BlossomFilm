@@ -113,31 +113,7 @@ export default function Fourcuts(props) {
     setCroppedImage(cropper.getCroppedCanvas().toDataURL());
     setComplete(true);
   };
-  const handleFileOnChange = async(e) => {
-        setshowCropper(false);
-        let file = URL.createObjectURL(e.target.files[0]);
 
-        // 이미지 resize 옵션 설정 (최대 width을 100px로 지정)
-  const options = { 
-    maxSizeMB: 2, 
-    maxWidthOrHeight: 100
-    }
-
-    try {
-    const compressedFile = await imageCompression(file, options);
-    setInputImage(compressedFile);
-    
-    // resize된 이미지의 url을 받아 fileUrl에 저장
-    const promise = imageCompression.getDataUrlFromFile(compressedFile);
-    promise.then(result => {
-        setCropData(result);
-    })
-    } catch (error) {
-        console.log(error);
-    }
-    }
-      
-  
   const getCropData = (e) => {
     if (typeof cropper !== "undefined") {
       setCropData(cropper.getCroppedCanvas().toDataURL());
@@ -157,8 +133,11 @@ export default function Fourcuts(props) {
         {/* 아래 사진입력은 사진을 입력받아서도 수정가능하게끔 할 수 있는 코드  */}
         <input
           type="file"
-          accept='image/*' 
-          onChange={handleFileOnChange}
+          accept="image/*"
+          onChange={(e) =>{
+            setshowCropper(false);
+            setInputImage(URL.createObjectURL(e.target.files[0]));
+          }}
         />
          {/* 아래 버튼을 누르면 받은 이전화면에서 받은 프레임으로 수정가능
         <button onClick={() => {
