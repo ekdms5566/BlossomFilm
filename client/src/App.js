@@ -1,10 +1,12 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import { createGlobalStyle } from "styled-components";
 
-import DownloadFilm from "./pages/DownloadFilm";
-import SetTitle from "./pages/SetTitle";
-import Sample from "./pages/SetTitle/Sample";
+import Editframe from "./components/frame/Editframe";
+import Uploadimg from "./components/frame/Uploadimg";
+import SetTitle from "./pages/SetTitle/index";
+import Root from "./Router/Root";
+
 const GlobalStyle = createGlobalStyle`
  *{
       margin: 0;
@@ -21,11 +23,45 @@ const GlobalStyle = createGlobalStyle`
   .hidden {height:100%; min-height:100%; overflow:hidden !important; touch-action:none;}
 `;
 
+// const router = createBrowserRouter([
+//     {
+//         path: "/",
+//         element: <Root />,
+//     },
+//     {
+//         path: "/Editframe",
+//         element: <Editframe />,
+//     },
+//     {
+//         path: "/Uploadimg",
+//         element: <Uploadimg />,
+//     },
+// ]);
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: <Root />,
+    },
+    {
+        path: "/frame",
+        element: <Editframe />,
+    },
+    {
+        path: "/Uploadimg",
+        element: <Uploadimg />,
+    },
+    {
+        path: "/title",
+        element: <SetTitle />,
+    },
+]);
+
 function App() {
     /*
-    모바일 환경에서 100vh 사용시 생기는 스크롤 버그 문제 방지 코드
-    사용하고자 하는 페이지 최상당 layout 사이즈  height: calc(var(--vh, 1vh) * 100) 로 설정하여 사용
-    */
+      모바일 환경에서 100vh 사용시 생기는 스크롤 버그 문제 방지 코드
+      사용하고자 하는 페이지 최상당 layout 사이즈  height: calc(var(--vh, 1vh) * 100) 로 설정하여 사용
+      */
     function setScreenSize() {
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty("--vh", `${vh}px`);
@@ -34,18 +70,12 @@ function App() {
     window.addEventListener("resize", setScreenSize);
 
     return (
-        <RecoilRoot>
-            <div className="App">
-                <GlobalStyle />
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<Sample />} />
-                        <Route path="/title" element={<SetTitle />} />
-                        <Route path="/download" element={<DownloadFilm />} />
-                    </Routes>
-                </BrowserRouter>
-            </div>
-        </RecoilRoot>
+        <div className="App">
+            <GlobalStyle />
+            <RecoilRoot>
+                <RouterProvider router={router} />
+            </RecoilRoot>
+        </div>
     );
 }
 

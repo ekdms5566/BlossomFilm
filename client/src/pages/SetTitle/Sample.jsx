@@ -36,7 +36,7 @@ const Sample = () => {
     const [film, setFilm] = useRecoilState(filmState);
     const [frame, setFrame] = useRecoilState(frameState);
     const [focusImg, setFocusImg] = useState();
-    const canvas = useRef();
+    const canvas = useRef(null);
 
     const nav = useNavigate();
 
