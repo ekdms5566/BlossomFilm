@@ -18,4 +18,8 @@ export const Button = styled.button`
     border: 2px solid #ff6581;
     color: #ff6581;
   }
+  &.uploadBtn {
+    margin: 0px 0px 20px 0px;
+  }
+
 `;

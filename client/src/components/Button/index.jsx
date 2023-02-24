@@ -1,10 +1,9 @@
-import * as S from "./style"
+import * as S from "./style";
 
-export default function Button({ text, className, onclick }) {
-  return (
-
-    <S.Button className={className} onClick={onclick}>
-      {text}
-    </S.Button>
-  )
+export default function Button({ text, className, onClick }) {
+    return (
+        <S.Button className={className} onClick={onClick}>
+            {text}
+        </S.Button>
+    );
 }
