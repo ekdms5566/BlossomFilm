@@ -11,6 +11,7 @@ export default function SelectFrame() {
             <Link to="/frame">
                 <Button text="갤러리에서 직접 선택" />
             </Link>
+
             <Link to="/selectFrametype">
                 <Button text="벚꽃필름 전용 프레임 선택" />
             </Link>

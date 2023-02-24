@@ -6,15 +6,7 @@ export const CutContext = createContext({
 });
 
 export const CutStore = (props) => {
-  const [cutSelect, setCutSelect] = useState(""); //public/asset 안에 있는 path string
-  /**
-   * 커스텀프레임
-   * hor
-   * ver
-   * 
-   * 전용프레임
-   * /assets/Frame1_hor.png ()
-   */
+  const [cutSelect, setCutSelect] = useState("");
 
   return (
     <CutContext.Provider value={{ cutSelect, setCutSelect }}>

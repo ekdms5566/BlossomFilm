@@ -95,7 +95,8 @@ export default function Uploadimg() {
     const [standard, setStandard] = useState("");
     const isUploadimg = (iscomplete) => {
         const temp = iscomplete === 0;
-        setCompelete(temp);
+        // setCompelete(temp);
+        setCompelete(true);
     };
     const handleClick = () => {
         return isdelete;
