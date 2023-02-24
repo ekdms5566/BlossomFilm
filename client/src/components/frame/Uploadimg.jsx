@@ -1,84 +1,83 @@
-import React, { useRef } from "react";
-import { useState, useEffect } from "react";
-import BackButton from "../BackButton";
-import styled, { css } from "styled-components";
-import { Button } from "../Button/style";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import styled, { css } from "styled-components";
+import BackButton from "../BackButton";
+import { Button } from "../Button/style";
 import Myimg from "./Myimg";
 
 const BgImg = styled.div`
-  ${(props) =>
-    props.data &&
-    css`
-      background-image: url(${props.data});
-    `}
+    ${(props) =>
+        props.data &&
+        css`
+            background-image: url(${props.data});
+        `}
     ${({ Standard }) =>
-    Standard === "Width" &&
-    css`
-      width: 394px;
-      height: 263px;
-      .imgbox {
-        display: flex;
-        flex-wrap: wrap;
-        margin-left: 9px;
-        padding-top: 23px;
-      }
-      .imgbox > section {
-        display: flex;
-        justify-content: center;
-      }
-      .imgbox > section > .testimg {
-        width: 157px;
-        height: 105px;
-        padding: 3px;
-      }
-    `}
+        Standard === "Width" &&
+        css`
+            width: 394px;
+            height: 263px;
+            .imgbox {
+                display: flex;
+                flex-wrap: wrap;
+                margin-left: 9px;
+                padding-top: 23px;
+            }
+            .imgbox > section {
+                display: flex;
+                justify-content: center;
+            }
+            .imgbox > section > .testimg {
+                width: 157px;
+                height: 105px;
+                padding: 3px;
+            }
+        `}
   ${({ Standard }) =>
-    Standard === "Length" &&
-    css`
-      width: 159.99px;
-      height: 479.97px;
-      .imgbox {
-        display: flex;
-        flex-wrap: wrap;
-        margin-left: 0px;
-        padding-top: 0px;
-      }
-      .imgbox > section {
-        display: flex;
-        justify-content: center;
-      }
-      .imgbox > section > .testimg {
-        width: 151px;
-        height: 100px;
-        padding: 3px;
-      }
-    `}
+        Standard === "Length" &&
+        css`
+            width: 159.99px;
+            height: 479.97px;
+            .imgbox {
+                display: flex;
+                flex-wrap: wrap;
+                margin-left: 0px;
+                padding-top: 0px;
+            }
+            .imgbox > section {
+                display: flex;
+                justify-content: center;
+            }
+            .imgbox > section > .testimg {
+                width: 151px;
+                height: 100px;
+                padding: 3px;
+            }
+        `}
   background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  z-index: 1;
+    background-position: center;
+    background-size: cover;
+    z-index: 1;
 `;
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: #4a4a4a;
+    display: flex;
+    flex-direction: column;
+    background-color: #4a4a4a;
 
-  .buttonBox {
-    margin: 63px 0px 0px 40px;
-  }
+    .buttonBox {
+        margin: 63px 0px 0px 40px;
+    }
 `;
 
 const Section = styled.div`
-  display: flex;
-  justify-content: center;
-  height: 100%;
-  color: white;
-  padding: 30px;
-  & > .uploadBtn {
-    margin: 0px 0px 20px 0px;
-  }
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    color: white;
+    padding: 30px;
+    & > .uploadBtn {
+        margin: 0px 0px 20px 0px;
+    }
 `;
 
 // const Grid = styled.div`
@@ -90,63 +89,63 @@ const Section = styled.div`
 // margin: 51px 0px 0px 14px;
 // `;
 export default function Uploadimg() {
-  const [complete, setCompelete] = useState(false);
-  const [isdelete, setIsDelete] = useState(false);
-  const [frameImg, setFrameImg] = useState("");
-  const [standard, setStandard] = useState("");
-  const isUploadimg = (iscomplete) => {
-    const temp = iscomplete === 0;
-    setCompelete(temp);
-  };
-  const handleClick = () => {
-    return isdelete;
-  };
-  const location = useLocation();
-  const madeframe = location.state.post;
-  const itemstandard = location.state.data;
-  useEffect(() => {
-    setStandard(itemstandard);
-    setFrameImg(madeframe);
-    
-console.log(standard);
-  }, [frameImg]);
+    const [complete, setCompelete] = useState(false);
+    const [isdelete, setIsDelete] = useState(false);
+    const [frameImg, setFrameImg] = useState("");
+    const [standard, setStandard] = useState("");
+    const isUploadimg = (iscomplete) => {
+        const temp = iscomplete === 0;
+        setCompelete(temp);
+    };
+    const handleClick = () => {
+        return isdelete;
+    };
+    const location = useLocation();
+    const madeframe = location.state.post;
+    const itemstandard = location.state.data;
+    useEffect(() => {
+        setStandard(itemstandard);
+        setFrameImg(madeframe);
 
-  useEffect(() => {
-    setIsDelete(false);
-  }, [isdelete]);
-  console.log(frameImg);
-  console.log(isdelete);
-  return (
-    <Container>
-      <div className="buttonBox">
-        <Link to="/Editframe">
-          <BackButton />
-        </Link>
-      </div>
-      <Section>
-        <p>사진을 4장 업로드해주세요!</p>
-      </Section>
-      <Section>
-        <BgImg data={frameImg} Standard={standard}>
-          <Myimg isUpload={isUploadimg} myref={handleClick} />
-        </BgImg>
-      </Section>
-      <Section>
-        {complete && (
-          <div>
-            <Link to="/정보입력">
-              <Button className="uploadBtn">확인</Button>
-            </Link>
-            <Button
-              onClick={() => {
-                setIsDelete(true);
-              }}
-            >
-              사진 전체 삭제
-            </Button>
-          </div>
-        )}
-      </Section>
-    </Container>
-  );
+        console.log(standard);
+    }, [frameImg]);
+
+    useEffect(() => {
+        setIsDelete(false);
+    }, [isdelete]);
+    console.log(frameImg);
+    console.log(isdelete);
+    return (
+        <Container>
+            <div className="buttonBox">
+                <Link to="/Editframe">
+                    <BackButton />
+                </Link>
+            </div>
+            <Section>
+                <p>사진을 4장 업로드해주세요!</p>
+            </Section>
+            <Section>
+                <BgImg data={frameImg} Standard={standard}>
+                    <Myimg isUpload={isUploadimg} isDelete={isdelete} />
+                </BgImg>
+            </Section>
+            <Section>
+                {complete && (
+                    <div>
+                        <Link to="/정보입력">
+                            <Button className="uploadBtn">확인</Button>
+                        </Link>
+                        <Button
+                            onClick={() => {
+                                setIsDelete(true);
+                            }}
+                        >
+                            사진 전체 삭제
+                        </Button>
+                    </div>
+                )}
+            </Section>
+        </Container>
+    );
 }
