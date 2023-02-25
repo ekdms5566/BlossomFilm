@@ -4,6 +4,7 @@
     "html2canvas": "^1.4.1",
     "react-cropper": "^2.1.8",
     "react-router-dom": "^6.8.1",
+    "react-snowfall": "^1.2.1",
     "recoil": "^0.7.6"
   }
 }
