@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { CutContext } from "../../context/Context";
 
 import axios from "axios";
 
@@ -13,6 +14,7 @@ import { filmState, frameState, titleState } from "../../store/filmState";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
+import { encrypt } from "../../utils/encrypt";
 
 const DownloadFilm = () => {
     const [isModalOpen, setModalOpen] = useState(false);
@@ -22,6 +24,11 @@ const DownloadFilm = () => {
     const title = useRecoilValue(titleState);
     const frame = useRecoilValue(frameState);
     //file 형식을 저장합니다
+    const { cutSelect } = useContext(CutContext);
+
+    useEffect(() => {
+        console.log("context", cutSelect);
+    }, []);
 
     const nav = useNavigate();
 
@@ -42,27 +49,41 @@ const DownloadFilm = () => {
     };
 
     const onClickShare = () => {
-        console.log(frame);
         //if (!frame) return;
         //서버에 제목과 프레임 전달
-        setUrl(title + "/some url put here");
-        setModalOpen(true);
+
+        // setUrl(title + "/some url put here");
+        // setModalOpen(true);
+
+        if (url) {
+            setModalOpen(true);
+            return;
+        }
 
         const request = new FormData();
-        request.append("image", frame);
-        request.append("title", title);
+        request.append("frame_image", frame);
+        request.append("title", "여의도");
+        request.append("width", cutSelect?.includes("hor") === true);
+        request.append("height", cutSelect?.includes("ver") === true);
 
         axios
-            .post("API_ENDPOINT", request, {
-                headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-Type": "multipart/form-data",
-                },
-                withCredentials: true,
-            })
+            .post(
+                `${process.env.REACT_APP_BASE_URL}/blossom/frames/`,
+                request,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            )
             .then((res) => {
                 console.log(res);
-                setUrl("get url and put here");
+                const secret = encrypt(
+                    "frame_id here",
+                    process.env.REACT_APP_SECRET
+                );
+
+                setUrl("http:/localhost:3000/" + res.data.id);
                 setModalOpen(true);
             })
             .catch((e) => {
@@ -76,7 +97,7 @@ const DownloadFilm = () => {
 
     return (
         <DownloadFilmLayout
-            type={frame && frame.includes("hor") ? "hor" : "ver"}
+            type={frame && cutSelect?.includes("hor") ? "hor" : "ver"}
         >
             {isModalOpen ? (
                 <Modal setModalState={setModalOpen} url={url} />
@@ -85,7 +106,7 @@ const DownloadFilm = () => {
             <div className="back-button">
                 <BackButton onClick={() => nav("/title")} />
             </div>
-
+            {/* <img src={frame} width="100px"></img> */}
             <h1 className="title">봄을 담은 벚꽃필름이 완성되었어요!</h1>
             {film ? (
                 <div className="frame">
@@ -99,18 +120,21 @@ const DownloadFilm = () => {
                 <p>사진 저장하기</p>
                 <img src={DownIcon} alt="다운로드" />
             </DownloadButton>
-            <Button
-                text={"URL로 프레임 공유하기"}
-                className="share"
-                onClick={onClickShare}
-            ></Button>
+            {cutSelect && !cutSelect.includes("Frame") && (
+                <Button
+                    text={"URL로 프레임 공유하기"}
+                    className="share"
+                    onClick={onClickShare}
+                ></Button>
+            )}
+
             {
                 //TODO : 제공 프레임일 경우 공유하기 버튼 숨기기
             }
-            <button className="retry-button" onClick={onClickRetry}>
-                {" "}
-                벚꽃필름 다시 만들기
-            </button>
+            <Link to="/">
+                <button className="retry-button">벚꽃필름 다시 만들기</button>
+            </Link>
+
             {/* {
                 title ? <p>{title}</p> : null
                 //확인용

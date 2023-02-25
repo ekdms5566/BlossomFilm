@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
+import html2canvas from "html2canvas";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled, { css } from "styled-components";
+import { CutContext } from "../../context/Context";
+import { filmState, frameState } from "../../store/filmState";
+import { decrypt } from "../../utils/encrypt";
 import BackButton from "../BackButton";
 import { Button } from "../Button/style";
 import Myimg from "./Myimg";
-import HomeButton from "../HomeButton";
 const BgImg = styled.div`
     ${(props) =>
         props.data &&
@@ -64,10 +69,10 @@ const Container = styled.div`
     flex-direction: column;
     background-color: #4a4a4a;
 
-  .buttonBox {
-    margin:63px 0px 37px 40px;
-    display:flex;
-  }
+    .buttonBox {
+        margin: 63px 0px 37px 40px;
+        display: flex;
+    }
 `;
 
 const Section = styled.div`
@@ -90,64 +95,144 @@ const Section = styled.div`
 // margin: 51px 0px 0px 14px;
 // `;
 export default function Uploadimg() {
-  const [complete, setCompelete] = useState(false);
-  const [isdelete, setIsDelete] = useState(false);
-  const [frameImg, setFrameImg] = useState("");
-  const [standard, setStandard] = useState("");
-  const isUploadimg = (iscomplete) => {
-    const temp = iscomplete === 0;
-    setCompelete(temp);
-  };
-  const handleClick = () => {
-    return isdelete;
-  };
-  const location = useLocation();
-  const madeframe = location.state.post;
-  const itemstandard = location.state.data;
-  useEffect(() => {
-    setStandard(itemstandard);
-    setFrameImg(madeframe);
-    
-    console.log(standard);
-  }, [frameImg]);
+    const [complete, setCompelete] = useState(true);
+    const [isdelete, setIsDelete] = useState(false);
 
-  useEffect(() => {
-    setIsDelete(false);
-  }, [isdelete]);
-  console.log(frameImg);
-  console.log(isdelete);
-  return (
-    <Container>
-      <div className="buttonBox">
-        <Link to="/Editframe">
-          <BackButton />
-        </Link>
-        <Link to="/">
-        <HomeButton/>
-        </Link>
-      </div>
-      <Section>
-        <p>컷을 클릭하여 사진을 4장 업로드해주세요!</p>
-      </Section>
-      <Section>
-          <Myimg isUpload={isUploadimg} isDelete={isdelete} data={frameImg} Standard={standard}/>
-      </Section>
-      <Section>
-        {complete && (
-          <div>
-            <Link to="/정보입력">
-              <Button className="uploadBtn">확인</Button>
-            </Link>
-            <Button
-              onClick={() => {
-                setIsDelete(true);
-              }}
-            >
-              사진 전체 삭제
-            </Button>
-          </div>
-        )}
-      </Section>
-    </Container>
-  );
+    const [frameImg, setFrameImg] = useState("");
+    const [standard, setStandard] = useState("");
+
+    const canvas = useRef(null);
+    const [film, setFilm] = useRecoilState(filmState);
+
+    /**************************/
+    //url 다이렉트 접근 s
+    const { id } = useParams();
+    const [isValid, setValid] = useState("loading"); //api 유효성
+    const { cutSelect, setCutselect } = useContext(CutContext);
+    const [editedFrame, setFrame] = useRecoilState(frameState);
+
+    useEffect(() => {
+        if (id?.includes("Uploadimg")) {
+            setValid("success");
+            return;
+        }
+        //id?.contains("Uploadimg") ? ) : setValid("loading");
+        const secret = decrypt(id, process.env.REACT_APP_SECRET);
+
+        if (id) {
+            axios
+                .get(`${process.env.REACT_APP_BASE_URL}/blossom/frames/${id}`)
+                .then((res) => {
+                    console.log(res);
+                    /*
+                    {
+    "frame_id": 2,
+		"title" :"제목", 
+    "width": false,
+    "height": false,
+    "frame_background": "http://127.0.0.1:8000/media/frame_photo/20220923132522_gTIFfhM.png"
+}
+                    */
+                    setFrameImg(res.data.frameImage);
+                    setStandard(res.data.width ? "hor" : "ver"); //프레임 방향설정
+                    //setCutselect(res.data.width ? "Frame_hor" : "Frame_ver");
+                    //setFrame(res.data.frame_background);
+                    setValid("success");
+                })
+                .catch((e) => {
+                    console.log(e);
+                    setValid("error");
+                });
+        }
+    }, []);
+    /**************************/
+
+    const isUploadimg = (iscomplete) => {
+        const temp = iscomplete === 0;
+        // setCompelete(temp);
+        setCompelete(true);
+    };
+    const handleClick = () => {
+        return isdelete;
+    };
+    const location = useLocation();
+    const madeframe = null; //location.state.post;
+    const itemstandard = "Length";
+
+    useEffect(() => {
+        console.log(frameImg);
+        setStandard(itemstandard);
+        //setFrameImg(editedFrame ? editedFrame : madeframe);
+        //제목에서 뒤로가기 선택시 기존 편집된 프레임 유지
+
+        console.log(standard);
+    }, [frameImg]);
+
+    useEffect(() => {
+        setIsDelete(false);
+    }, [isdelete]);
+    // console.log(frameImg);
+    // console.log(isdelete);
+
+    const onClickDownload = () => {
+        if (!canvas) return;
+
+        html2canvas(canvas.current, {
+            allowTaint: true,
+            useCORS: true,
+            scale: 10,
+        }).then(function (canvas) {
+            var myImage = canvas.toDataURL("image/jpeg");
+            setFilm(myImage);
+        });
+    };
+
+    return isValid === "success" ? (
+        <Container>
+            <div className="buttonBox">
+                <Link to="/frame">
+                    <BackButton />
+                </Link>
+            </div>
+            <Section>
+                <p>사진을 4장 업로드해주세요!</p>
+            </Section>
+            <Section>
+                <BgImg ref={canvas} data={frameImg} Standard={standard}>
+                    <Myimg isUpload={isUploadimg} isDelete={isdelete} />
+                </BgImg>
+            </Section>
+            <Section>
+                {complete && (
+                    <div>
+                        <Link to="/title">
+                            <Button
+                                className="uploadBtn"
+                                onClick={onClickDownload}
+                            >
+                                확인
+                            </Button>
+                        </Link>
+                        <Button
+                            onClick={() => {
+                                setIsDelete(true);
+                            }}
+                        >
+                            사진 전체 삭제
+                        </Button>
+                    </div>
+                )}
+            </Section>
+        </Container>
+    ) : (
+        <>
+            {isValid === "loading" ? (
+                <p>프레임 가져오는 중...</p>
+            ) : (
+                <>
+                    <p>유효하지 않은 프레임!</p>
+                </>
+            )}
+        </>
+    );
 }
