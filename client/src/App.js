@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import { createGlobalStyle } from "styled-components";
-import { CutStore } from "./context/Context";
+import { CutStore, FrameBgStore } from "./context/Context";
 
 import Editframe from "./components/frame/Editframe";
 import Uploadimg from "./components/frame/Uploadimg";
@@ -76,14 +76,16 @@ function App() {
     window.addEventListener("resize", setScreenSize);
 
     return (
-        <div className="App">
-            <CutStore>
-                <GlobalStyle />
-                <RecoilRoot>
-                    <RouterProvider router={router} />
-                </RecoilRoot>
-            </CutStore>
-        </div>
+      <div className="App">
+        <CutStore>
+          <FrameBgStore>
+            <GlobalStyle />
+            <RecoilRoot>
+              <RouterProvider router={router} />
+            </RecoilRoot>
+          </FrameBgStore>
+        </CutStore>
+      </div>
     );
 }
 
