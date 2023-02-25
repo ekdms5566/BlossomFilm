@@ -1,11 +1,12 @@
 import "cropperjs/dist/cropper.css";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import Cropper from "react-cropper";
 import { useRecoilState } from "recoil";
 import { frameState } from "../../store/filmState";
 import { convertURLtoFile } from "../../utils/urltofile";
 import CropButton from "../CropButton";
 import * as S from "./style/style.js";
+import { CutContext, FrameBgContext } from "../../context/Context";
 
 export default function Fourcuts(props) {
     const cropperRef = useRef(null);
@@ -17,11 +18,13 @@ export default function Fourcuts(props) {
     //   const [croppedImage, setCroppedImage] = useState(null);
     //   const [complete, setComplete] = useState(false);
     const [showcropper, setshowCropper] = useState(false);
-    const [standard, setStandard] = useState("Width");
     // 인생네컷 가로 세로 기준 state
     const [frame, setFrame] = useRecoilState(frameState);
+    const { frameBg,setFrameBg } = useContext(FrameBgContext);
+    const { cutSelect } = useContext(CutContext); 
 
-    console.log(standard);
+
+    console.log(frameBg, cutSelect);
     const onCrop = () => {
         const imageElement = cropperRef?.current;
         const cropper = imageElement?.cropper;
@@ -33,11 +36,13 @@ export default function Fourcuts(props) {
         // setStandard("Length");
         if (typeof cropper !== "undefined") {
             const url = cropper.getCroppedCanvas().toDataURL();
-            setCropData();
+            setCropData(url);
             setshowCropper(true);
+            setFrameBg(url);
             const converted = convertURLtoFile(url).then((res) => {
                 console.log("res", res);
                 setFrame(res);
+
             });
         }
         console.log(cropperRef.current);
@@ -47,13 +52,13 @@ export default function Fourcuts(props) {
         setshowCropper(false);
     };
 
-    props.pagemove(cropData, standard);
+    props.pagemove(cropData, cutSelect);
 
     return (
         <S.Container>
             <div className="wrapperContainer">
                 {/* 아래 사진입력은 사진을 입력받아서도 수정가능하게끔 할 수 있는 코드  */}
-                <input
+                {/* <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => {
@@ -62,17 +67,17 @@ export default function Fourcuts(props) {
                         //setFrame(e.target.files[0]);
                         console.log("event", e.target.files[0]);
                     }}
-                />
-                {/* <CropButton
+                /> */}
+                <CropButton
           style="color:white"
           text="수정하기"
           onClick={() => {
             setshowCropper(false);
-            setInputImage("assets/Frame1_hor.png");
+            setInputImage(frameBg);
           }}
         >
           <img style={{height:"1.15rem"}} src="assets/framebtn/blossom.png"></img>
-        </CropButton> */}
+        </CropButton>
 
                 <section className="btnbox">
                     <CropButton
@@ -98,7 +103,7 @@ export default function Fourcuts(props) {
                 />
                 {/* <img className="previewImg" src={croppedImage} /> */}
             </div>
-            <S.BgImg className="bgImg" Standard={standard} data={cropData}>
+            <S.BgImg className="bgImg" Standard={cutSelect} data={cropData}>
                 <div className="imgbox">
                     <Imgbox itemclass="testimg1" />
                     <Imgbox itemclass="testimg2" />

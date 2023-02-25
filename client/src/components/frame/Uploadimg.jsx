@@ -9,6 +9,7 @@ import { filmState, frameState } from "../../store/filmState";
 import { decrypt } from "../../utils/encrypt";
 import BackButton from "../BackButton";
 import { Button } from "../Button/style";
+import { FrameBgContext } from "../../context/Context";
 import Myimg from "./Myimg";
 const BgImg = styled.div`
     ${(props) =>
@@ -84,6 +85,10 @@ const Section = styled.div`
     & > .uploadBtn {
         margin: 0px 0px 20px 0px;
     }
+
+    &.on {
+        padding: 0 0 69px;
+    }
 `;
 
 // const Grid = styled.div`
@@ -103,13 +108,14 @@ export default function Uploadimg() {
 
     const canvas = useRef(null);
     const [film, setFilm] = useRecoilState(filmState);
-
+    const { frameBg ,setFrameBg } = useContext(FrameBgContext);
     /**************************/
     //url 다이렉트 접근 s
     const { id } = useParams();
     const [isValid, setValid] = useState("loading"); //api 유효성
     const { cutSelect, setCutselect } = useContext(CutContext);
     const [editedFrame, setFrame] = useRecoilState(frameState);
+
 
     useEffect(() => {
         if (id?.includes("Uploadimg")) {
@@ -156,17 +162,18 @@ export default function Uploadimg() {
         return isdelete;
     };
     const location = useLocation();
-    const madeframe = null; //location.state.post;
-    const itemstandard = "Length";
+    const madeframe = location.state?.post;
+    const itemstandard = location.state?.data;
 
     useEffect(() => {
         console.log(frameImg);
         setStandard(itemstandard);
+        setFrameImg(frameBg);
         //setFrameImg(editedFrame ? editedFrame : madeframe);
         //제목에서 뒤로가기 선택시 기존 편집된 프레임 유지
 
-        console.log(standard);
-    }, [frameImg]);
+        console.log(frameImg);
+    }, [frameBg]);
 
     useEffect(() => {
         setIsDelete(false);
@@ -187,7 +194,8 @@ export default function Uploadimg() {
         });
     };
 
-    return isValid === "success" ? (
+    return isValid === "success" ? 
+    (
         <Container>
             <div className="buttonBox">
                 <Link to="/frame">
@@ -197,7 +205,7 @@ export default function Uploadimg() {
             <Section>
                 <p>사진을 4장 업로드해주세요!</p>
             </Section>
-            <Section>
+            <Section className="on">
                 <BgImg ref={canvas} data={frameImg} Standard={standard}>
                     <Myimg isUpload={isUploadimg} isDelete={isdelete} />
                 </BgImg>
