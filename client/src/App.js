@@ -24,6 +24,7 @@ const GlobalStyle = createGlobalStyle`
     max-width: 479px;
   }
   .hidden {height:100%; min-height:100%; overflow:hidden !important; touch-action:none;}
+
 `;
 
 const router = createBrowserRouter([
@@ -76,16 +77,16 @@ function App() {
     window.addEventListener("resize", setScreenSize);
 
     return (
-      <div className="App">
-        <CutStore>
-          <FrameBgStore>
-            <GlobalStyle />
-            <RecoilRoot>
-              <RouterProvider router={router} />
-            </RecoilRoot>
-          </FrameBgStore>
-        </CutStore>
-      </div>
+        <div className="App">
+            <CutStore>
+                <FrameBgStore>
+                    <GlobalStyle />
+                    <RecoilRoot>
+                        <RouterProvider router={router} />
+                    </RecoilRoot>
+                </FrameBgStore>
+            </CutStore>
+        </div>
     );
 }
 

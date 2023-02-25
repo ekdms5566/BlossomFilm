@@ -1,7 +1,8 @@
 import "cropperjs/dist/cropper.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Cropper from "react-cropper";
 import styled, { css } from "styled-components";
+import { CutContext } from "../../context/Context";
 import CropButton from "../CropButton";
 
 const BackgroundImg = styled.div`
@@ -14,6 +15,7 @@ const BackgroundImg = styled.div`
     background-position: center;
     background-size: cover;
     z-index: 1;
+    margin: 0 auto;
 
     ${({ Standard }) =>
         Standard === "Width" &&
@@ -37,7 +39,7 @@ const BackgroundImg = styled.div`
                 align-items: center;
             }
             .imgbox > section > label > span > p {
-                font-size: 4px;
+                font-size: 10px;
             }
             .imgbox > section > .testimg1 {
                 padding: 26px 3.4px 3.4px 20.36px;
@@ -75,9 +77,11 @@ const BackgroundImg = styled.div`
             }
             .imgbox > section > label > span {
                 display: flex;
+                justify-content: center;
+                align-items: center;
             }
             .imgbox > section > label > span > p {
-                font-size: 4px;
+                font-size: 10px;
             }
             .imgbox > section > .testimg1 {
                 padding: 13.4px 12.97px 4.2px 12.97px;
@@ -117,7 +121,14 @@ const Input = styled.input`
 
 const section = styled.div``;
 
-export default function Myimg({ isUpload, isDelete, data, Standard }) {
+export default function Myimg({
+    isUpload,
+    isDelete,
+    data,
+    Standard,
+    frameRef,
+}) {
+    const { cutSelect } = useContext(CutContext);
     var cropperRef = useRef(null);
     // 유저가 첨부한 이미지
     const [files, setFiles] = useState({
@@ -221,7 +232,7 @@ export default function Myimg({ isUpload, isDelete, data, Standard }) {
                 }}
             />
             <form method="post" enctype="multipart/form-data">
-                <BackgroundImg data={data} Standard={Standard}>
+                <BackgroundImg data={data} Standard={cutSelect} ref={frameRef}>
                     <div className="imgbox">
                         {!cropData.File1 && (
                             <section>

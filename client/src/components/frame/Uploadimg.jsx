@@ -4,11 +4,12 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled, { css } from "styled-components";
-import { CutContext } from "../../context/Context";
+import { CutContext, FrameBgContext } from "../../context/Context";
 import { filmState, frameState } from "../../store/filmState";
 import { decrypt } from "../../utils/encrypt";
 import BackButton from "../BackButton";
 import { Button } from "../Button/style";
+import Loading from "../Loading";
 import Myimg from "./Myimg";
 const BgImg = styled.div`
     ${(props) =>
@@ -84,6 +85,10 @@ const Section = styled.div`
     & > .uploadBtn {
         margin: 0px 0px 20px 0px;
     }
+
+    &.on {
+        padding: 0 0 69px;
+    }
 `;
 
 // const Grid = styled.div`
@@ -103,12 +108,12 @@ export default function Uploadimg() {
 
     const canvas = useRef(null);
     const [film, setFilm] = useRecoilState(filmState);
-
+    const { frameBg, setFrameBg } = useContext(FrameBgContext);
     /**************************/
     //url 다이렉트 접근 s
     const { id } = useParams();
     const [isValid, setValid] = useState("loading"); //api 유효성
-    const { cutSelect, setCutselect } = useContext(CutContext);
+    const { cutSelect, setCutSelect } = useContext(CutContext);
     const [editedFrame, setFrame] = useRecoilState(frameState);
 
     useEffect(() => {
@@ -117,11 +122,16 @@ export default function Uploadimg() {
             return;
         }
         //id?.contains("Uploadimg") ? ) : setValid("loading");
-        const secret = decrypt(id, process.env.REACT_APP_SECRET);
-
-        if (id) {
+        const secret = decrypt(id);
+        // if (!secret) {
+        //     setValid("error");
+        //     return;
+        // }
+        if (secret) {
             axios
-                .get(`${process.env.REACT_APP_BASE_URL}/blossom/frames/${id}`)
+                .get(
+                    `${process.env.REACT_APP_BASE_URL}/blossom/frames/${secret.id}`
+                )
                 .then((res) => {
                     console.log(res);
                     /*
@@ -134,9 +144,10 @@ export default function Uploadimg() {
 }
                     */
                     setFrameImg(res.data.frameImage);
-                    setStandard(res.data.width ? "hor" : "ver"); //프레임 방향설정
-                    //setCutselect(res.data.width ? "Frame_hor" : "Frame_ver");
+                    //setStandard(res.data.width ? "hor" : "ver"); //프레임 방향설정
+                    setCutSelect(res.data.width ? "Width" : "Length");
                     //setFrame(res.data.frame_background);
+                    setFrameBg(res.data.frameImage);
                     setValid("success");
                 })
                 .catch((e) => {
@@ -156,17 +167,17 @@ export default function Uploadimg() {
         return isdelete;
     };
     const location = useLocation();
-    const madeframe = null; //location.state.post;
-    const itemstandard = "Length";
+    const madeframe = location.state?.post;
+    const itemstandard = location.state?.data;
 
     useEffect(() => {
-        console.log(frameImg);
         setStandard(itemstandard);
+        setFrameImg(madeframe ? madeframe : frameBg);
         //setFrameImg(editedFrame ? editedFrame : madeframe);
         //제목에서 뒤로가기 선택시 기존 편집된 프레임 유지
 
-        console.log(standard);
-    }, [frameImg]);
+        console.log(frameImg);
+    }, [frameBg]);
 
     useEffect(() => {
         setIsDelete(false);
@@ -180,7 +191,7 @@ export default function Uploadimg() {
         html2canvas(canvas.current, {
             allowTaint: true,
             useCORS: true,
-            scale: 10,
+            scale: 20,
         }).then(function (canvas) {
             var myImage = canvas.toDataURL("image/jpeg");
             setFilm(myImage);
@@ -197,10 +208,14 @@ export default function Uploadimg() {
             <Section>
                 <p>사진을 4장 업로드해주세요!</p>
             </Section>
-            <Section>
-                <BgImg ref={canvas} data={frameImg} Standard={standard}>
-                    <Myimg isUpload={isUploadimg} isDelete={isdelete} />
-                </BgImg>
+            <Section className="on">
+                <Myimg
+                    isUpload={isUploadimg}
+                    isDelete={isdelete}
+                    data={frameBg}
+                    Standard={cutSelect}
+                    frameRef={canvas}
+                />
             </Section>
             <Section>
                 {complete && (
@@ -226,13 +241,7 @@ export default function Uploadimg() {
         </Container>
     ) : (
         <>
-            {isValid === "loading" ? (
-                <p>프레임 가져오는 중...</p>
-            ) : (
-                <>
-                    <p>유효하지 않은 프레임!</p>
-                </>
-            )}
+            <Loading isError={isValid !== "loading"} />
         </>
     );
 }

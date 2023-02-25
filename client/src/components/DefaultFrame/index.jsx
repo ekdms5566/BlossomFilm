@@ -28,7 +28,7 @@ export default function DefaultFrame({ frame, setFrame }) {
   const { cutSelect } = useContext(CutContext);
 
   const FrameList =
-    cutSelect === "hor" ?
+    cutSelect === "Width" ?
       [Frame, Frame2, Frame3, Frame4]
       : [Vframe1, Vframe2, Vframe3, Vframe4]
 
