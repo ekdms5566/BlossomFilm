@@ -10,7 +10,6 @@ import { decrypt } from "../../utils/encrypt";
 import BackButton from "../BackButton";
 import { Button } from "../Button/style";
 import Myimg from "./Myimg";
-import HomeButton from "../HomeButton";
 const BgImg = styled.div`
     ${(props) =>
         props.data &&
@@ -70,10 +69,10 @@ const Container = styled.div`
     flex-direction: column;
     background-color: #4a4a4a;
 
-  .buttonBox {
-    margin:63px 0px 37px 40px;
-    display:flex;
-  }
+    .buttonBox {
+        margin: 63px 0px 37px 40px;
+        display: flex;
+    }
 `;
 
 const Section = styled.div`
@@ -106,24 +105,25 @@ export default function Uploadimg() {
     const [film, setFilm] = useRecoilState(filmState);
 
     /**************************/
-    //url 다이렉트 접근
+    //url 다이렉트 접근 s
     const { id } = useParams();
     const [isValid, setValid] = useState("loading"); //api 유효성
     const { cutSelect, setCutselect } = useContext(CutContext);
     const [editedFrame, setFrame] = useRecoilState(frameState);
 
     useEffect(() => {
-        alert(id);
         if (id?.includes("Uploadimg")) {
             setValid("success");
             return;
         }
         //id?.contains("Uploadimg") ? ) : setValid("loading");
         const secret = decrypt(id, process.env.REACT_APP_SECRET);
+
         if (id) {
             axios
-                .get(`${process.env.REACT_APP_BASE_URL}/blossom/my_frame/${id}`)
+                .get(`${process.env.REACT_APP_BASE_URL}/blossom/frames/${id}`)
                 .then((res) => {
+                    console.log(res);
                     /*
                     {
     "frame_id": 2,
@@ -133,10 +133,10 @@ export default function Uploadimg() {
     "frame_background": "http://127.0.0.1:8000/media/frame_photo/20220923132522_gTIFfhM.png"
 }
                     */
-                    setFrameImg(res.data.frame_background);
+                    setFrameImg(res.data.frameImage);
                     setStandard(res.data.width ? "hor" : "ver"); //프레임 방향설정
-                    setCutselect(res.data.width ? "Frame_hor" : "Frame_ver");
-                    setFrame(res.data.frame_background);
+                    //setCutselect(res.data.width ? "Frame_hor" : "Frame_ver");
+                    //setFrame(res.data.frame_background);
                     setValid("success");
                 })
                 .catch((e) => {
@@ -156,12 +156,13 @@ export default function Uploadimg() {
         return isdelete;
     };
     const location = useLocation();
-    const madeframe = location.state.post;
+    const madeframe = null; //location.state.post;
     const itemstandard = "Length";
 
     useEffect(() => {
+        console.log(frameImg);
         setStandard(itemstandard);
-        setFrameImg(editedFrame ? editedFrame : madeframe);
+        //setFrameImg(editedFrame ? editedFrame : madeframe);
         //제목에서 뒤로가기 선택시 기존 편집된 프레임 유지
 
         console.log(standard);
@@ -170,8 +171,8 @@ export default function Uploadimg() {
     useEffect(() => {
         setIsDelete(false);
     }, [isdelete]);
-    console.log(frameImg);
-    console.log(isdelete);
+    // console.log(frameImg);
+    // console.log(isdelete);
 
     const onClickDownload = () => {
         if (!canvas) return;
