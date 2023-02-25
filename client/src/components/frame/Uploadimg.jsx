@@ -10,7 +10,7 @@ import { decrypt } from "../../utils/encrypt";
 import BackButton from "../BackButton";
 import { Button } from "../Button/style";
 import Myimg from "./Myimg";
-
+import HomeButton from "../HomeButton";
 const BgImg = styled.div`
     ${(props) =>
         props.data &&
@@ -70,9 +70,10 @@ const Container = styled.div`
     flex-direction: column;
     background-color: #4a4a4a;
 
-    .buttonBox {
-        margin: 63px 0px 0px 40px;
-    }
+  .buttonBox {
+    margin:63px 0px 37px 40px;
+    display:flex;
+  }
 `;
 
 const Section = styled.div`

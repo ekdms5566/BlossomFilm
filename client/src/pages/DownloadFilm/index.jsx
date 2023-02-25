@@ -49,14 +49,14 @@ const DownloadFilm = () => {
     };
 
     const onClickShare = () => {
-        console.log(frame);
-        alert(frame);
         //if (!frame) return;
         //서버에 제목과 프레임 전달
         const secret = encrypt("frame_id here", process.env.REACT_APP_SECRET);
 
-        setUrl(title + "/some url put here");
-        setModalOpen(true);
+        // setUrl(title + "/some url put here");
+        // setModalOpen(true);
+
+        if (url) return;
 
         const request = new FormData();
         request.append("frame_image", frame);
@@ -65,10 +65,12 @@ const DownloadFilm = () => {
         request.append("height", cutSelect?.includes("ver") === true);
 
         axios
-            .post("API_ENDPOINT", request, {
+            .post("https://blossomfilm.xyz/blossom/frames", request, {
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-Type": "multipart/form-data",
+                    "access-control-allow-origin": "*",
+                    "Access-Control-Allow-Headers":
+                        "Content-Type, Authorization",
+                    "Access-Control-Allow-Methods": "*",
                 },
                 withCredentials: true,
             })
