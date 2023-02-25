@@ -15,6 +15,7 @@ const BackgroundImg = styled.div`
     background-position: center;
     background-size: cover;
     z-index: 1;
+    margin: 0 auto;
 
     ${({ Standard }) =>
         Standard === "Width" &&
@@ -76,9 +77,11 @@ const BackgroundImg = styled.div`
             }
             .imgbox > section > label > span {
                 display: flex;
+                justify-content: center;
+                align-items: center;
             }
             .imgbox > section > label > span > p {
-                font-size: 4px;
+                font-size: 10px;
             }
             .imgbox > section > .testimg1 {
                 padding: 13.4px 12.97px 4.2px 12.97px;

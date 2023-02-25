@@ -113,7 +113,7 @@ export default function Uploadimg() {
     //url 다이렉트 접근 s
     const { id } = useParams();
     const [isValid, setValid] = useState("loading"); //api 유효성
-    const { cutSelect, setCutselect } = useContext(CutContext);
+    const { cutSelect, setCutSelect } = useContext(CutContext);
     const [editedFrame, setFrame] = useRecoilState(frameState);
 
     useEffect(() => {
@@ -123,10 +123,10 @@ export default function Uploadimg() {
         }
         //id?.contains("Uploadimg") ? ) : setValid("loading");
         const secret = decrypt(id);
-        if (!secret) {
-            setValid("error");
-            return;
-        }
+        // if (!secret) {
+        //     setValid("error");
+        //     return;
+        // }
         if (secret) {
             axios
                 .get(
@@ -144,9 +144,10 @@ export default function Uploadimg() {
 }
                     */
                     setFrameImg(res.data.frameImage);
-                    setStandard(res.data.width ? "hor" : "ver"); //프레임 방향설정
-                    //setCutselect(res.data.width ? "Frame_hor" : "Frame_ver");
+                    //setStandard(res.data.width ? "hor" : "ver"); //프레임 방향설정
+                    setCutSelect(res.data.width ? "Width" : "Length");
                     //setFrame(res.data.frame_background);
+                    setFrameBg(res.data.frameImage);
                     setValid("success");
                 })
                 .catch((e) => {

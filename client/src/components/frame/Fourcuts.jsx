@@ -73,12 +73,7 @@ export default function Fourcuts(props) {
                         setshowCropper(false);
                         setInputImage(frameBg);
                     }}
-                >
-                    <img
-                        style={{ height: "1.15rem" }}
-                        src="assets/framebtn/blossom.png"
-                    ></img>
-                </CropButton>
+                ></CropButton>
 
                 <section className="btnbox">
                     <CropButton
@@ -106,7 +101,11 @@ export default function Fourcuts(props) {
 
                 {/* <img className="previewImg" src={croppedImage} /> */}
             </div>
-            <S.BgImg className="bgImg" Standard={cutSelect} data={cropData}>
+            <S.BgImg
+                className="bgImg"
+                Standard={cutSelect}
+                data={cropData ? cropData : frameBg}
+            >
                 <div className="imgbox">
                     <Imgbox itemclass="testimg1" />
                     <Imgbox itemclass="testimg2" />

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CutContext } from "../../context/Context";
+import { CutContext, FrameBgContext } from "../../context/Context";
 
 import axios from "axios";
 
@@ -25,6 +25,7 @@ const DownloadFilm = () => {
     const frame = useRecoilValue(frameState);
     //file 형식을 저장합니다
     const { cutSelect } = useContext(CutContext);
+    const { frameBg } = useContext(FrameBgContext);
 
     useEffect(() => {
         console.log("context", cutSelect);
@@ -49,22 +50,22 @@ const DownloadFilm = () => {
     };
 
     const onClickShare = () => {
-        //if (!frame) return;
+        if (!frame) return;
         //서버에 제목과 프레임 전달
 
         // setUrl(title + "/some url put here");
         // setModalOpen(true);
 
-        // if (url) {
-        //     setModalOpen(true);
-        //     return;
-        // }
+        if (url) {
+            setModalOpen(true);
+            return;
+        }
 
         const request = new FormData();
         request.append("frame_image", frame);
         request.append("title", "여의도");
-        request.append("width", cutSelect?.includes("hor") === true);
-        request.append("height", cutSelect?.includes("ver") === true);
+        request.append("width", cutSelect?.includes("Width") === true);
+        request.append("height", cutSelect?.includes("Length") === true);
 
         axios
             .post(
@@ -93,9 +94,7 @@ const DownloadFilm = () => {
     };
 
     return (
-        <DownloadFilmLayout
-            type={frame && cutSelect?.includes("hor") ? "hor" : "ver"}
-        >
+        <DownloadFilmLayout type={cutSelect?.includes("Width") ? "hor" : "ver"}>
             {isModalOpen ? (
                 <Modal setModalState={setModalOpen} url={url} />
             ) : null}
@@ -117,7 +116,7 @@ const DownloadFilm = () => {
                 <p>사진 저장하기</p>
                 <img src={DownIcon} alt="다운로드" />
             </DownloadButton>
-            {cutSelect && !cutSelect.includes("Frame") && (
+            {!frameBg.includes("blossomfilm.xyz") && (
                 <Button
                     text={"URL로 프레임 공유하기"}
                     className="share"
