@@ -1,12 +1,12 @@
 import "cropperjs/dist/cropper.css";
-import React, { useRef, useState, useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Cropper from "react-cropper";
 import { useRecoilState } from "recoil";
+import { CutContext, FrameBgContext } from "../../context/Context";
 import { frameState } from "../../store/filmState";
 import { convertURLtoFile } from "../../utils/urltofile";
 import CropButton from "../CropButton";
 import * as S from "./style/style.js";
-import { CutContext, FrameBgContext } from "../../context/Context";
 
 export default function Fourcuts(props) {
     const cropperRef = useRef(null);
@@ -20,9 +20,8 @@ export default function Fourcuts(props) {
     const [showcropper, setshowCropper] = useState(false);
     // 인생네컷 가로 세로 기준 state
     const [frame, setFrame] = useRecoilState(frameState);
-    const { frameBg,setFrameBg } = useContext(FrameBgContext);
-    const { cutSelect } = useContext(CutContext); 
-
+    const { frameBg, setFrameBg } = useContext(FrameBgContext);
+    const { cutSelect } = useContext(CutContext);
 
     console.log(frameBg, cutSelect);
     const onCrop = () => {
@@ -42,7 +41,6 @@ export default function Fourcuts(props) {
             const converted = convertURLtoFile(url).then((res) => {
                 console.log("res", res);
                 setFrame(res);
-
             });
         }
         console.log(cropperRef.current);
@@ -69,15 +67,18 @@ export default function Fourcuts(props) {
                     }}
                 /> */}
                 <CropButton
-          style="color:white"
-          text="수정하기"
-          onClick={() => {
-            setshowCropper(false);
-            setInputImage(frameBg);
-          }}
-        >
-          <img style={{height:"1.15rem"}} src="assets/framebtn/blossom.png"></img>
-        </CropButton>
+                    style="color:white"
+                    text="수정하기"
+                    onClick={() => {
+                        setshowCropper(false);
+                        setInputImage(frameBg);
+                    }}
+                >
+                    <img
+                        style={{ height: "1.15rem" }}
+                        src="assets/framebtn/blossom.png"
+                    ></img>
+                </CropButton>
 
                 <section className="btnbox">
                     <CropButton
@@ -92,6 +93,7 @@ export default function Fourcuts(props) {
                         onClick={reCrop}
                     ></CropButton>
                 </section>
+
                 <Cropper
                     className={showcropper ? `cropper-hidden` : "cropperObject"}
                     src={inputImage}
@@ -101,6 +103,7 @@ export default function Fourcuts(props) {
                         setCropper(instance);
                     }}
                 />
+
                 {/* <img className="previewImg" src={croppedImage} /> */}
             </div>
             <S.BgImg className="bgImg" Standard={cutSelect} data={cropData}>

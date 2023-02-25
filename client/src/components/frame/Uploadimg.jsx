@@ -4,12 +4,12 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled, { css } from "styled-components";
-import { CutContext } from "../../context/Context";
+import { CutContext, FrameBgContext } from "../../context/Context";
 import { filmState, frameState } from "../../store/filmState";
 import { decrypt } from "../../utils/encrypt";
 import BackButton from "../BackButton";
 import { Button } from "../Button/style";
-import { FrameBgContext } from "../../context/Context";
+import Loading from "../Loading";
 import Myimg from "./Myimg";
 const BgImg = styled.div`
     ${(props) =>
@@ -108,7 +108,7 @@ export default function Uploadimg() {
 
     const canvas = useRef(null);
     const [film, setFilm] = useRecoilState(filmState);
-    const { frameBg ,setFrameBg } = useContext(FrameBgContext);
+    const { frameBg, setFrameBg } = useContext(FrameBgContext);
     /**************************/
     //url 다이렉트 접근 s
     const { id } = useParams();
@@ -116,18 +116,22 @@ export default function Uploadimg() {
     const { cutSelect, setCutselect } = useContext(CutContext);
     const [editedFrame, setFrame] = useRecoilState(frameState);
 
-
     useEffect(() => {
         if (id?.includes("Uploadimg")) {
             setValid("success");
             return;
         }
         //id?.contains("Uploadimg") ? ) : setValid("loading");
-        const secret = decrypt(id, process.env.REACT_APP_SECRET);
-
-        if (id) {
+        const secret = decrypt(id);
+        if (!secret) {
+            setValid("error");
+            return;
+        }
+        if (secret) {
             axios
-                .get(`${process.env.REACT_APP_BASE_URL}/blossom/frames/${id}`)
+                .get(
+                    `${process.env.REACT_APP_BASE_URL}/blossom/frames/${secret.id}`
+                )
                 .then((res) => {
                     console.log(res);
                     /*
@@ -166,9 +170,8 @@ export default function Uploadimg() {
     const itemstandard = location.state?.data;
 
     useEffect(() => {
-        console.log(frameImg);
         setStandard(itemstandard);
-        setFrameImg(frameBg);
+        setFrameImg(madeframe ? madeframe : frameBg);
         //setFrameImg(editedFrame ? editedFrame : madeframe);
         //제목에서 뒤로가기 선택시 기존 편집된 프레임 유지
 
@@ -187,15 +190,14 @@ export default function Uploadimg() {
         html2canvas(canvas.current, {
             allowTaint: true,
             useCORS: true,
-            scale: 10,
+            scale: 20,
         }).then(function (canvas) {
             var myImage = canvas.toDataURL("image/jpeg");
             setFilm(myImage);
         });
     };
 
-    return isValid === "success" ? 
-    (
+    return isValid === "success" ? (
         <Container>
             <div className="buttonBox">
                 <Link to="/frame">
@@ -206,9 +208,13 @@ export default function Uploadimg() {
                 <p>사진을 4장 업로드해주세요!</p>
             </Section>
             <Section className="on">
-                <BgImg ref={canvas} data={frameImg} Standard={standard}>
-                    <Myimg isUpload={isUploadimg} isDelete={isdelete} />
-                </BgImg>
+                <Myimg
+                    isUpload={isUploadimg}
+                    isDelete={isdelete}
+                    data={frameBg}
+                    Standard={cutSelect}
+                    frameRef={canvas}
+                />
             </Section>
             <Section>
                 {complete && (
@@ -234,13 +240,7 @@ export default function Uploadimg() {
         </Container>
     ) : (
         <>
-            {isValid === "loading" ? (
-                <p>프레임 가져오는 중...</p>
-            ) : (
-                <>
-                    <p>유효하지 않은 프레임!</p>
-                </>
-            )}
+            <Loading isError={isValid !== "loading"} />
         </>
     );
 }
