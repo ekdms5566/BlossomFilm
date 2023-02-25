@@ -9,6 +9,7 @@ import { filmState, frameState } from "../../store/filmState";
 import { decrypt } from "../../utils/encrypt";
 import BackButton from "../BackButton";
 import { Button } from "../Button/style";
+import Loading from "../Loading";
 import Myimg from "./Myimg";
 const BgImg = styled.div`
     ${(props) =>
@@ -117,11 +118,16 @@ export default function Uploadimg() {
             return;
         }
         //id?.contains("Uploadimg") ? ) : setValid("loading");
-        const secret = decrypt(id, process.env.REACT_APP_SECRET);
-
-        if (id) {
+        const secret = decrypt(id);
+        if (!secret) {
+            setValid("error");
+            return;
+        }
+        if (secret) {
             axios
-                .get(`${process.env.REACT_APP_BASE_URL}/blossom/frames/${id}`)
+                .get(
+                    `${process.env.REACT_APP_BASE_URL}/blossom/frames/${secret.id}`
+                )
                 .then((res) => {
                     console.log(res);
                     /*
@@ -226,13 +232,7 @@ export default function Uploadimg() {
         </Container>
     ) : (
         <>
-            {isValid === "loading" ? (
-                <p>프레임 가져오는 중...</p>
-            ) : (
-                <>
-                    <p>유효하지 않은 프레임!</p>
-                </>
-            )}
+            <Loading isError={isValid !== "loading"} />
         </>
     );
 }

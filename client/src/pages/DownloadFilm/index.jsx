@@ -14,7 +14,7 @@ import { filmState, frameState, titleState } from "../../store/filmState";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
-import { encrypt } from "../../utils/encrypt";
+import { decrypt, encrypt } from "../../utils/encrypt";
 
 const DownloadFilm = () => {
     const [isModalOpen, setModalOpen] = useState(false);
@@ -55,10 +55,10 @@ const DownloadFilm = () => {
         // setUrl(title + "/some url put here");
         // setModalOpen(true);
 
-        if (url) {
-            setModalOpen(true);
-            return;
-        }
+        // if (url) {
+        //     setModalOpen(true);
+        //     return;
+        // }
 
         const request = new FormData();
         request.append("frame_image", frame);
@@ -78,12 +78,9 @@ const DownloadFilm = () => {
             )
             .then((res) => {
                 console.log(res);
-                const secret = encrypt(
-                    "frame_id here",
-                    process.env.REACT_APP_SECRET
-                );
-
-                setUrl("http:/localhost:3000/" + res.data.id);
+                const secret = encrypt(res.data.id);
+                console.log("de", decrypt(secret));
+                setUrl(`${window.location.host}/` + secret);
                 setModalOpen(true);
             })
             .catch((e) => {

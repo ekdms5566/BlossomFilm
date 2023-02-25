@@ -24,7 +24,9 @@ const Modal = ({ setModalState, url }) => {
                     }}
                 />
                 <CopyButtonLayout>
-                    <p className="content-input">{url.substring(0, 30)}</p>
+                    <p className="content-input">
+                        {url.substring(0, 25) + "..."}
+                    </p>
 
                     <CopyBtn
                         onClick={() => {
