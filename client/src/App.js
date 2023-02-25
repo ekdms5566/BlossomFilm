@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import { createGlobalStyle } from "styled-components";
-import { CutStore } from "./context/Context";
+import { CutStore, FrameBgStore } from "./context/Context";
 
 import Editframe from "./components/frame/Editframe";
 import Uploadimg from "./components/frame/Uploadimg";
@@ -24,6 +24,7 @@ const GlobalStyle = createGlobalStyle`
     max-width: 479px;
   }
   .hidden {height:100%; min-height:100%; overflow:hidden !important; touch-action:none;}
+
 `;
 
 const router = createBrowserRouter([
@@ -78,10 +79,12 @@ function App() {
     return (
         <div className="App">
             <CutStore>
-                <GlobalStyle />
-                <RecoilRoot>
-                    <RouterProvider router={router} />
-                </RecoilRoot>
+                <FrameBgStore>
+                    <GlobalStyle />
+                    <RecoilRoot>
+                        <RouterProvider router={router} />
+                    </RecoilRoot>
+                </FrameBgStore>
             </CutStore>
         </div>
     );
